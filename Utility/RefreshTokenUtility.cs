@@ -22,8 +22,9 @@ namespace JwtAuthentication.Utility
 			_key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret??string.Empty));
 		}
 
-		public RefreshAndJwtToken GenerateTokens(User user, RefreshToken? refreshToken)
+		public RefreshAndJwtToken GenerateTokens(User? user, RefreshToken? refreshToken)
 		{
+			if (user is null) return null;
 			var claims = new Dictionary<string, object>() {
 				{ ClaimTypes.NameIdentifier,user.Id},
 				{ ClaimTypes.Email,user.Email??string.Empty},
@@ -36,7 +37,7 @@ namespace JwtAuthentication.Utility
 				new SecurityTokenDescriptor
 				{
 					Claims = claims,
-					Expires = DateTime.UtcNow.AddSeconds(20),
+					Expires = DateTime.UtcNow.AddSeconds(30),
 					SigningCredentials = creds
 
 				}
@@ -71,7 +72,7 @@ namespace JwtAuthentication.Utility
 		}
 
 
-		public string GenerateRefreshToken()
+		private string GenerateRefreshToken()
 		{
 			var randomBytes = new byte[32];
 
@@ -83,6 +84,7 @@ namespace JwtAuthentication.Utility
 
 		public User? GetUserFromToken(string token)
 		{
+			if (string.IsNullOrEmpty(token)) return null;
 			var param = GetTokenValidatorParams();
 
 			var handler = new JwtSecurityTokenHandler();
@@ -93,12 +95,13 @@ namespace JwtAuthentication.Utility
 				principal = handler.ValidateToken(token,
 					param, out var validatedToken);
 			}
-			catch (SecurityTokenExpiredException)
+			catch (SecurityTokenExpiredException e)
 			{
-				return null;
+				principal = handler.ValidateToken(token,
+					param, out var validatedToken);
 
 			}
-			catch (SecurityTokenNoExpirationException)
+			catch (SecurityTokenNoExpirationException )
 			{
 				return null;
 			}

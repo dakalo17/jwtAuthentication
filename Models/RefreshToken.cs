@@ -2,9 +2,9 @@
 {
 	public class RefreshToken
 	{
-		public int FkUserId { get; internal set; }
-		public string? RToken { get; internal set; }
-		public DateTime ExpiringDate { get; internal set; }
-		public string? Key { get; internal set; }
+		public int FkUserId { get; set; }
+		public string? RToken { get; set; }
+		public DateTime ExpiringDate { get; set; }
+		public string? Key { get; set; }
 	}
 }

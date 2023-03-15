@@ -45,6 +45,10 @@ namespace JwtAuthentication.Services
 				ex.GetBaseException();
 				return null;
 			}
+			finally
+			{
+				await _connection.CloseAsync();
+			}
 
 			return refreshTokens;
 		}
@@ -92,6 +96,10 @@ namespace JwtAuthentication.Services
 				ex.GetBaseException();
 				return null;
 			}
+			finally
+			{
+				await _connection.CloseAsync();
+			}
 
 			return refreshToken;
 		}
@@ -112,8 +120,8 @@ namespace JwtAuthentication.Services
 					cmd.Parameters.AddWithValue("@token", token?.RToken ?? string.Empty);
 					cmd.Parameters.AddWithValue("@key", token?.Key ?? string.Empty);
 					cmd.Parameters.AddWithValue("@expiring_date", token?.ExpiringDate ?? DateTime.UtcNow);
-		
-					
+
+
 					rowsAffected = await cmd.ExecuteNonQueryAsync();
 				}
 			}
@@ -121,6 +129,10 @@ namespace JwtAuthentication.Services
 			{
 				ex.GetBaseException();
 				return null;
+			}
+			finally
+			{
+				await _connection.CloseAsync();
 			}
 
 			return rowsAffected;

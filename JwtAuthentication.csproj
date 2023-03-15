@@ -7,10 +7,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="SqlQueries\create_refresh_token_table.sql" />
+	  <None Remove="SqlQueries\create_user_table.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
 		<PackageReference Include="Npgsql" Version="7.0.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="SqlQueries\" />
 	</ItemGroup>
 
 </Project>
