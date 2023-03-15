@@ -13,7 +13,7 @@ namespace JwtAuthentication.Services
 		}
 
 
-		public async Task<bool?> Select(User userIn)
+		public async Task<User?> Select(User userIn)
 		{
 			const string sql = "select * from \"user\" " +
 			"where email=@email and password=@password;";
@@ -36,9 +36,11 @@ namespace JwtAuthentication.Services
 				{
 					if (reader.HasRows)
 					{
-						return reader["email"].ToString()?.ToLower()
-							.Equals(userIn?.Email?.ToLower());
-							
+						user = new User{
+							Id = Convert.ToInt32(reader["id"]),
+							Email = reader["email"].ToString()
+						};
+						return user;
 					}
 				}
 
@@ -55,7 +57,7 @@ namespace JwtAuthentication.Services
 				await _connection.CloseAsync();
 			}
 
-			return false;
+			return null;
 		}
 
 	}

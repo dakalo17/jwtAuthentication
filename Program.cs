@@ -1,3 +1,4 @@
+using JwtAuthentication.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -34,8 +35,9 @@ builder.Services.AddSwaggerGen(x=>
 				Id = "Bearer"
 			}
 		},
-		Array.Empty<string>()
+	  Array.Empty<string>()
 	}
+  });
 
 
 });
@@ -63,6 +65,10 @@ builder.Services.AddAuthentication(x =>
 	};
 });
 
+
+builder.Services.AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>();
+
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
