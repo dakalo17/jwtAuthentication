@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(x=>
 
 });
 
-
+//Jwt configurations
 builder.Services.AddAuthentication(x =>
 {
 	x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -64,6 +64,7 @@ builder.Services.AddAuthentication(x =>
 
 	};
 });
+
 
 
 builder.Services.AddSingleton<IRefreshTokenRepository, RefreshTokenRepository>();

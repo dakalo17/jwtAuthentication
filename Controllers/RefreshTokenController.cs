@@ -46,12 +46,12 @@ namespace JwtAuthentication.Controllers
 
 			return res is not null ? Ok(res) : BadRequest("Could not generate token");
 		}
-
+		[Obsolete("There is not need to call this endpoint...yet")]
 		[HttpGet("GetRefreshToken")]
 		public IActionResult GetUserFromToken()
 		{
 			var auth = Request.Headers["Authorization"];
-			var token = auth[0];
+			var token = auth[0]?.Split(" ")[1];
 
 
 			var user = _utility.GetUserFromToken(token??string.Empty);
