@@ -48,7 +48,7 @@ namespace JwtAuthentication.Controllers
 		}
 
 		[HttpGet("GetRefreshToken")]
-		public async Task<IActionResult> GetUserFromToken()
+		public IActionResult GetUserFromToken()
 		{
 			var auth = Request.Headers["Authorization"];
 			var token = auth[0];

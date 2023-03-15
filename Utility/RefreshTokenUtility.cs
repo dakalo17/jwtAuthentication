@@ -84,35 +84,32 @@ namespace JwtAuthentication.Utility
 
 		public User? GetUserFromToken(string token)
 		{
-			if (string.IsNullOrEmpty(token)) return null;
+			var handler = new JwtSecurityTokenHandler();
+
+			if (string.IsNullOrEmpty(token) || !handler.CanReadToken(token))
+				return null;
+
 			var param = GetTokenValidatorParams();
 
-			var handler = new JwtSecurityTokenHandler();
-			ClaimsPrincipal? principal = null;
+			
+			
+			var readToken = handler.ReadJwtToken(token);
+			
+			
+			
+			var claims = readToken.Claims;
+			
+			var userId = Convert.ToInt32(claims.FirstOrDefault(x => x.Type =="nameid")?.Value);
 
-			try
-			{
-				principal = handler.ValidateToken(token,
-					param, out var validatedToken);
-			}
-			catch (SecurityTokenExpiredException e)
-			{
-				principal = handler.ValidateToken(token,
-					param, out var validatedToken);
+			var userEmail = claims.FirstOrDefault(x => x.Type == "email")?.Value;
 
-			}
-			catch (SecurityTokenNoExpirationException )
-			{
-				return null;
-			}
-			catch (Exception ex)
-			{
-				ex.GetBaseException();
-				return null;
-			}
 
-			var userEmail = principal?.FindFirstValue(ClaimTypes.Email);
-			var userId = Convert.ToInt32(principal?.FindFirstValue(ClaimTypes.NameIdentifier));
+			//principal = handler.ValidateToken(token,
+			//param, out var validatedToken);
+
+
+			//var userEmail = principal?.FindFirstValue(ClaimTypes.Email);
+			//var userId = Convert.ToInt32(principal?.FindFirstValue(ClaimTypes.NameIdentifier));
 			
 
 			return new User
